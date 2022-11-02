@@ -40,7 +40,7 @@ class Program
         }
 
         Console.WriteLine("Napravio Mateo Kos");
-        Console.WriteLine("Kalkulator matrica v1.3, Lipanj 2022.");
+        Console.WriteLine("Kalkulator matrica v1.4, Lipanj 2022.");
         Thread.Sleep(500);
         
     }
