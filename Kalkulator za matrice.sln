@@ -3,12 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kalkulator za matrice", "Kalkulator za matrice\Kalkulator za matrice.csproj", "{AF303C4D-B880-416D-B4D6-C6048976D0B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kalkulator za matrice", "Kalkulator za matrice\Kalkulator za matrice.csproj", "{AF303C4D-B880-416D-B4D6-C6048976D0B6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{05295F23-C160-422E-80DB-BE3963DF06CF}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testiranje Aplikacija", "Testiranje Aplikacija\Testiranje Aplikacija.csproj", "{E8C76C85-74BD-43B2-A4CF-4A075D065580}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +22,10 @@ Global
 		{AF303C4D-B880-416D-B4D6-C6048976D0B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF303C4D-B880-416D-B4D6-C6048976D0B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF303C4D-B880-416D-B4D6-C6048976D0B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8C76C85-74BD-43B2-A4CF-4A075D065580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8C76C85-74BD-43B2-A4CF-4A075D065580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8C76C85-74BD-43B2-A4CF-4A075D065580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8C76C85-74BD-43B2-A4CF-4A075D065580}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
