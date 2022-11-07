@@ -5,7 +5,7 @@ using FunkcijeZaMatrice;
 //Lokalni namespace
 using KonzolnaKontrola;
 using MatricaNS;
-
+using UserInputParser;
 
 class Program
 {
@@ -31,29 +31,41 @@ class Program
         ///                         KOMANDNA LINIJA
 
         bool useKonzola = false;
-        string userInput = "TestA + TestB - TestA * TestB + TestA^T";
-        
-        UserInputParser.UserInputParser.UserToKonsoleTranslator(userInput, Matrice);
-        useKonzola = true;
+        int exitProgram = 1;
 
-
-        if (useKonzola)
+        Console.WriteLine("Dobro došli u kalkulator za matrice");
+        Console.WriteLine("Upišite HELP za listu komandi");
+        while (exitProgram != (int)returnFlags.SaveToFile && exitProgram != (int)returnFlags.exitProgram)
         {
-            Konzola Konzola = new Konzola();
-            Console.WriteLine("Kalkulator za Matrice");
-            Console.WriteLine("Upisi HELP za listu komandi.\n");
-            int exit = 0;
-
-            while (exit < 1)
+            Console.Write(">");
+            try
             {
-                Console.Write("MC.KOS$ ");
-                exit = Konzola.Input(Console.ReadLine() + "", Matrice);
-            }
+            exitProgram = UserInputParser.UserInputParser.UserToKonsoleTranslator(Console.ReadLine() + "", Matrice);
+            } catch (ArgumentException e) { Console.WriteLine("Greška: " + e.Message); } 
+            catch (InvalidOperationException e) { Console.WriteLine("Greška: " + e.Message); }
             useKonzola = false;
-        }
 
+            if (exitProgram == (int)returnFlags.exitToConsole)
+                useKonzola = true;
+
+
+            if (useKonzola)
+            {
+                Konzola Konzola = new Konzola();
+                Console.WriteLine("\nKalkulator za Matrice");
+                Console.WriteLine("Upisi HELP za listu komandi.\n");
+                int exit = 0;
+
+                while (exit < 1)
+                {
+                    Console.Write("MC.KOS$ ");
+                    exit = Konzola.Input(Console.ReadLine() + "", Matrice);
+                }
+                useKonzola = false;
+            }
+        }
         Console.WriteLine("Napravio Mateo Kos");
-        Console.WriteLine("Kalkulator matrica v2.0, Lipanj 2022.");
+        Console.WriteLine("Kalkulator matrica v2.1, Lipanj 2022.");
         Thread.Sleep(500);
         
     }
@@ -69,9 +81,17 @@ namespace UserInputParser
     {
         public static int UserToKonsoleTranslator(string userInput, List<Matrica> Matrice, int tempInt = 0)
         {
+            bool print = true;
             if (userInput == null) return (int)returnFlags.err;
             if (userInput.Length == 0) return (int)returnFlags.err;
-            if (userInput.ToUpper() == "Q" || userInput.ToUpper() == "ESC") return (int)returnFlags.normal;
+            if (userInput.ToUpper() == "Q" || userInput.ToUpper() == "ESC") return (int)returnFlags.exitProgram;
+            if (userInput.ToUpper() == "ASM") return (int)returnFlags.exitToConsole;
+            if (userInput.ToUpper() == "HELP" || userInput == "?")
+            {
+                Konzola TKonzola = new Konzola();
+                TKonzola.Input("?", Matrice);
+                return (int)returnFlags.normal;
+            }
 
             bool internalCall = true;
             int prioritetPL = 3;
@@ -139,7 +159,7 @@ namespace UserInputParser
                 bool numOnly = false;
 
                 var A = Fn.FindPerName(prijeOperacije + "", MatriceCopy);
-                var B = Fn.FindPerName(posljeOperacije, MatriceCopy);
+                var B = Fn.FindPerName(posljeOperacije + "", MatriceCopy);
                 if (A == null || B == null)
                     if (IsNumber(userInputOperacije[Operacije[0].index - 1]) && IsNumber(posljeOperacije))
                     {
@@ -148,6 +168,7 @@ namespace UserInputParser
                         userInputOperacije.RemoveAt(Operacije[0].index);    //Uklanja operande i operaciju
                         userInputOperacije.RemoveAt(Operacije[0].index - 1);
                         numOnly = true;
+                        print = false;
                     }
                     else if (IsNumber(prijeOperacije) || IsNumber(posljeOperacije))
                         throw new ArgumentException("Nije moguæe zbrojiti matricu sa skalarom");
@@ -183,7 +204,7 @@ namespace UserInputParser
                 bool numOnly = false;
 
                 var A = Fn.FindPerName(prijeOperacije + "", MatriceCopy);
-                var B = Fn.FindPerName(posljeOperacije, MatriceCopy);
+                var B = Fn.FindPerName(posljeOperacije + "", MatriceCopy);
                 if (A == null || B == null)
                     if (IsNumber(userInputOperacije[Operacije[0].index - 1]) && IsNumber(posljeOperacije))
                     {
@@ -192,6 +213,7 @@ namespace UserInputParser
                         userInputOperacije.RemoveAt(Operacije[0].index);    //Uklanja operande i operaciju
                         userInputOperacije.RemoveAt(Operacije[0].index - 1);
                         numOnly = true;
+                        print = false;
                     }
                     else if (IsNumber(prijeOperacije) || IsNumber(posljeOperacije))
                         throw new ArgumentException("Nije moguæe zbrojiti matricu sa skalarom");
@@ -227,7 +249,7 @@ namespace UserInputParser
                 bool numOnly = false;
 
                 var A = Fn.FindPerName(prijeOperacije + "", MatriceCopy);
-                var B = Fn.FindPerName(posljeOperacije, MatriceCopy);
+                var B = Fn.FindPerName(posljeOperacije + "", MatriceCopy);
                 if (A == null || B == null)
                     if (IsNumber(prijeOperacije) && IsNumber(posljeOperacije))
                     {
@@ -236,6 +258,8 @@ namespace UserInputParser
                         userInputOperacije.RemoveAt(Operacije[0].index);    //Uklanja operande i operaciju
                         userInputOperacije.RemoveAt(Operacije[0].index - 1);
                         numOnly = true;
+                        print = false;
+
                     } else if (A == null && !IsNumber(prijeOperacije) || B == null && !IsNumber(posljeOperacije))
                         throw new ArgumentException($"Jedna od matrica nije definirana (\"{prijeOperacije} + {posljeOperacije}\")");
 
@@ -292,6 +316,7 @@ namespace UserInputParser
                             rj = Math.Pow(double.Parse(prijeOperacije), double.Parse(posljeOperacije));
 
                         userInputOperacije[Operacije[0].index] = $"{rj}";
+                        print = false;
 
                     }
                     else throw new ArgumentException("A^B -> A mora biti broj ili ime matrice");
@@ -332,14 +357,15 @@ namespace UserInputParser
                 string posljeOperacije = userInputOperacije[Operacije[0].index + 1];
 
                 var A = Fn.FindPerName(prijeOperacije + "", MatriceCopy);
-                var B = Fn.FindPerName(posljeOperacije, MatriceCopy);
+                var B = Fn.FindPerName(posljeOperacije + "", MatriceCopy);
                 if (A == null || B == null)
                     if (IsNumber(prijeOperacije) && IsNumber(posljeOperacije))
                     {
                         if (int.Parse(prijeOperacije) == int.Parse(posljeOperacije) ) {
-                            Console.WriteLine("Lijeva i desna strana su jednake!");
+                            Console.WriteLine("Lijeva i desna strana su jednake! (TRUE)");
                             return (int)returnFlags.JednadzbaTrue;
                         }
+                        Console.WriteLine("Lijeva i desna strana nije jednaka! (FALSE)");
                         return (int)returnFlags.JednadzbaFalse;
                     }
                     else if (A == null && IsNumber(posljeOperacije))
@@ -348,8 +374,8 @@ namespace UserInputParser
                         throw new ArgumentException($"Nije pronaðena matrica {B.imeMatrice}!");
                     else if (A == null)
                     {
-                        KonzolniString = $"{Konzola.mnozenje} 1 TMP{tempInt - 1} {Konzola.spremiUVarijablu} {prijeOperacije}";
-                        Konzola.Input(KonzolniString, MatriceCopy);
+                        KonzolniString = $"{Konzola.mnozenje} 1 {B.imeMatrice} {Konzola.spremiUVarijablu} {prijeOperacije}";
+                        Konzola.Input(KonzolniString, Matrice);
                         Operacije.RemoveAt(0);
                         return (int)returnFlags.exitResultStored;
                     }
@@ -359,21 +385,22 @@ namespace UserInputParser
                 {
                     if (Fn.IsEqual(A, B))
                     {
-                        Console.WriteLine("Lijeva i desna strana su jednake!");
+                        Console.WriteLine("Lijeva i desna strana su jednake! (TRUE)");
                         Operacije.RemoveAt(0);
                         return (int)returnFlags.JednadzbaTrue;
                     }
                     else
                     {
-                        Console.WriteLine("Lijeva i desna strana nisu jednake!");
+                        Console.WriteLine("Lijeva i desna strana nisu jednake! (FALSE)");
                         Operacije.RemoveAt(0);
-                        if (Fn.ReDefiniraj(A, MatriceCopy))
+                        if (Fn.ReDefiniraj(A, Matrice))
                         {
-                            Console.Write("\nUpiši ime novoj matrici: ");
+                            Console.Write("\nUpiši ime za novu matricu (ako je isto stara se brise): ");
                             string imeNoveMatrice = Console.ReadLine() + "";
+                            if (imeNoveMatrice != A.imeMatrice) Matrice.Add(A);
                             if (imeNoveMatrice == null) imeNoveMatrice = B.imeMatrice;
                             Matrica Rj = new(imeNoveMatrice, B.elementiMatrice);
-                            MatriceCopy.Add(Rj);
+                            Matrice.Add(Rj);
                             return (int)returnFlags.exitResultStored;
                         }
                         return (int)returnFlags.normal;
@@ -388,14 +415,20 @@ namespace UserInputParser
             if (Operacije.Count() > 0)
                 rfll = UserToKonsoleTranslator(userInput, MatriceCopy, tempInt + 1); // Return from lower layer
             
-            if (rfll == (int)returnFlags.normal || rfll == (int)returnFlags.exitResultStored)
+            if ((rfll == (int)returnFlags.normal || rfll == (int)returnFlags.exitResultStored))
             Matrice.Add(MatriceCopy[MatriceCopy.Count - 1]);
+
+            if (IsNumber(userInput)) Console.WriteLine(userInput);
 
             if (rfll == (int)returnFlags.err)
                 return (int)returnFlags.err;
 
-            if (tempInt == 0)
+            if (tempInt == 0 && !IsNumber(userInput) && print)
             Konzola.Input($"PRINT {MatriceCopy[MatriceCopy.Count - 1].imeMatrice}", Matrice);
+            
+            if (rfll == (int)returnFlags.normal)
+            Matrice.Remove(MatriceCopy[MatriceCopy.Count - 1]);
+
 
             return (int)returnFlags.normal;
         }
@@ -444,7 +477,7 @@ namespace UserInputParser
 
     enum returnFlags
     {
-        err = -1, normal, exitResultStored, SaveToFile, JednadzbaTrue, JednadzbaFalse
+        err = -1, normal, exitResultStored, SaveToFile, JednadzbaTrue, JednadzbaFalse, exitToConsole, exitProgram
     }
 
     struct PrioritetOperacija
@@ -460,6 +493,8 @@ namespace UserInputParser
         {
             if (x.prioritet < y.prioritet)                               //sortira prioritet rastuci
                 return -1;
+            else if (x.prioritet > y.prioritet)
+                return 1;
             else if (x.index < y.index)
                 return -1;
             else

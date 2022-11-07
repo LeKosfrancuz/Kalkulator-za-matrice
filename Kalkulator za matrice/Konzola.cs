@@ -3,7 +3,7 @@ using MatricaNS;
 
 namespace KonzolnaKontrola
 {
-    enum returnFlags
+    enum returnFlagsKonsole
     {
         err = -1, normal, exit, saveNExit
     }
@@ -41,13 +41,13 @@ namespace KonzolnaKontrola
                 Console.WriteLine("  \"ST {Ime Nove Matrice}\"                  - Dolazi nakon matematičke operacije za spremanje rezultata u novu matricu npr(ADD A B ST C)");
                 Console.WriteLine("  \"HELP\"                                   - Ispisuje ovaj meni");
                 Console.WriteLine("  \"Q\", \"ESC\"                               - Zatvara program");
-                return (int)returnFlags.normal;
+                return (int)returnFlagsKonsole.normal;
             }
 
-            if (userCommandFunc == "Q" || userCommandFunc == exitProgram) { return (int)returnFlags.exit; }
+            if (userCommandFunc == "Q" || userCommandFunc == exitProgram) { return (int)returnFlagsKonsole.exit; }
 
 
-            if (userCommandSplit.Length == 1 && userCommandFunc != "Q" && userCommandFunc != exitProgram) { Console.WriteLine("Potrebni su operandi (nakon ključne riječi)"); return (int)returnFlags.err; }
+            if (userCommandSplit.Length == 1 && userCommandFunc != "Q" && userCommandFunc != exitProgram) { Console.WriteLine("Potrebni su operandi (nakon ključne riječi)"); return (int)returnFlagsKonsole.err; }
 
             if (userCommandFunc == ispisMatrice)
             {
