@@ -65,7 +65,7 @@ class Program
             }
         }
         Console.WriteLine("Napravio Mateo Kos");
-        Console.WriteLine("Kalkulator matrica v2.2, Lipanj 2022.");
+        Console.WriteLine("Kalkulator matrica v2.3, Lipanj 2022.");
         Thread.Sleep(500);
         
     }
@@ -79,14 +79,18 @@ namespace UserInputParser
 {
     public class UserInputParser
     {
+        public static string exitFromCalc = "Q";
+        public static string exitToConsole = "ASM";
+        public static string helpMeni = "HELP";
+        public static string defineVariable = "DEF";
         public static int UserToKonsoleTranslator(string userInput, List<Matrica> Matrice, int tempInt = 0)
         {
             bool print = true;
             if (userInput == null) return (int)returnFlags.err;
             if (userInput.Length == 0) return (int)returnFlags.err;
-            if (userInput.ToUpper() == "Q" || userInput.ToUpper() == "ESC") return (int)returnFlags.exitProgram;
-            if (userInput.ToUpper() == "ASM") return (int)returnFlags.exitToConsole;
-            if (userInput.ToUpper() == "HELP" || userInput == "?")
+            if (userInput.ToUpper() == exitFromCalc || userInput.ToUpper() == "ESC") return (int)returnFlags.exitProgram;
+            if (userInput.ToUpper() == exitToConsole) return (int)returnFlags.exitToConsole;
+            if (userInput.ToUpper() == helpMeni || userInput == "?")
             {
                 Konzola TKonzola = new Konzola();
                 TKonzola.Input("?", Matrice);
@@ -102,16 +106,16 @@ namespace UserInputParser
 
 
             List<string> userInputOperacije = new List<string>(userInput.Split(" "));
-            if (userInputOperacije.Count == 1)
+            if (userInputOperacije.Count == 1 && !userInputOperacije[0].Contains("^"))
             {
                 Konzola TKonzola = new Konzola();
                 TKonzola.Input(TKonzola.ispisMatrice + " " + userInput, Matrice);
                 return (int)returnFlags.softExit;
             }
-            if (userInputOperacije[0].ToUpper() == "DEF")
+            if (userInputOperacije[0].ToUpper() == defineVariable)
             {
                 Konzola TKonzola = new Konzola();
-                TKonzola.Input(userInput, Matrice);
+                TKonzola.Input(TKonzola.definiranjeMatrice + " " + userInputOperacije[1], Matrice);
                 return (int)returnFlags.softExit;
             }
             int maxIndex = userInputOperacije.Count();

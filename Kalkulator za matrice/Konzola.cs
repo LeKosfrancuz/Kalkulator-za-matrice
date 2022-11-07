@@ -30,7 +30,32 @@ namespace KonzolnaKontrola
 
             if (userCommandFunc == "?" || userCommandFunc == helpMenu)
             {
-                Console.WriteLine("\n\n\nOperacije s matricama:");
+                //Za Kalkulator
+                Console.WriteLine("Operacije \"A + B\", \"A - B\", \"A * B\", \"A = B\"");
+                Console.WriteLine("\t- Moraju imati 2 ili više operanda npr (A = B, A + B, ...)");
+                Console.WriteLine("\t- Operandi su imena matrica i brojevi (numericke vrjednosti)");
+                Console.WriteLine("\t- Ove operacije MORAJU se pisati sa razmakom oko njih npr (A_=_B) gdje je \"_\" razmak\n");
+
+                Console.WriteLine("Operacije potenciranja: \"A^B\"");
+                Console.WriteLine("\t- Moraju imati 2 operanda");
+                Console.WriteLine("\t- Pišu se BEZ razmaka npr (2^3)");
+                Console.WriteLine("\t- A - broj ili matrica");
+                Console.WriteLine("\t- B - pozitivan broj ili slovo \"T\"\n");
+
+                Console.WriteLine("HELP MENI ZA KALKULATOR MATRICA\n\n" +
+                                  "od verzije 2.1 sljedeće komande su dostupne: \n\n" +
+                                  "\"{0} [ImeMatrice]\" \n" + 
+                                  "\t- Započinje kreaciju matrice [ImeMatrice]\n\n" + 
+                                  "\"{1}\", \"?\"\n" + 
+                                  "\t- Pokaže ovaj meni\n\n" +
+                                  "\"{2}\" \n" +
+                                  "\t- Izađe iz kalkulatora u konzolu\n\n" +
+                                  "\"{3}\", \"ESC\"\n" +
+                                  "\t- Izađe iz programa\n\n", UserInputParser.UserInputParser.defineVariable, UserInputParser.UserInputParser.helpMeni, UserInputParser.UserInputParser.exitToConsole, UserInputParser.UserInputParser.exitFromCalc);
+
+
+                //Za Konzolu
+                Console.WriteLine("\nOperacije s matricama:");
                 Console.WriteLine("  \"ADD {Ime Matrice} {Ime Matrice}\"        - Zbrajanje matrica");
                 Console.WriteLine("  \"MTY {Ime Matrice} {Ime Matrice}\"        - Množenje matrica");
                 Console.WriteLine("  \"MTY {skalar} {Ime Matrice}\"             - Množenje matrice sa skalarom");
@@ -39,7 +64,7 @@ namespace KonzolnaKontrola
                 Console.WriteLine("  \"PRINT ALL\"                              - Ispis svih Matrica");
                 Console.WriteLine("  \"DEF {Ime Nove Matrice}\"                 - Definiranje varijable za novu matricu");
                 Console.WriteLine("  \"ST {Ime Nove Matrice}\"                  - Dolazi nakon matematičke operacije za spremanje rezultata u novu matricu npr(ADD A B ST C)");
-                Console.WriteLine("  \"HELP\"                                   - Ispisuje ovaj meni");
+                Console.WriteLine("  \"HELP\", \"?\"                              - Ispisuje ovaj meni");
                 Console.WriteLine("  \"Q\", \"ESC\"                               - Zatvara program");
                 return (int)returnFlagsKonsole.normal;
             }
