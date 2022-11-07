@@ -1,4 +1,6 @@
-﻿using System.Runtime.Serialization.Formatters.Binary;
+﻿using System.Globalization;
+using System.Linq.Expressions;
+using System.Runtime.Serialization.Formatters.Binary;
 using MatricaNS;
 
 namespace FunkcijeZaMatrice
@@ -94,6 +96,26 @@ namespace FunkcijeZaMatrice
             return rjesenje;
         }
 
+        public static List<List<double>> DodajSvakomElementu(Matrica A, int skalar)
+        {
+            List<List<double>> rjesenje = new List<List<double>> { };
+            List<double> redak = new List<double> { };
+
+
+            for (int i = 0; i < A.BrojRedaka(); i++)
+                redak.Add(0);
+
+            for (int i = 0; i < A.BrojStupaca(); i++)
+                rjesenje.Add(DeepCopy(redak));
+
+            for (int i = 0; i < A.BrojRedaka(); i++)
+                for (int j = 0; j < A.BrojStupaca(); j++)
+                    rjesenje[i][j] = A.elementiMatrice[i][j] + 1;
+
+            return rjesenje;
+
+        }
+
         public static void IspisMatrice(List<List<double>> matrica)
         {
             int stupci = matrica[0].Count;
@@ -174,6 +196,18 @@ namespace FunkcijeZaMatrice
             Matrica NovaMatrica = new Matrica(imeMatrice, elementiMatrice);
             Matrice.Add(NovaMatrica);
             return;
+        }
+
+        public static bool IsEqual(Matrica A, Matrica B)
+        {
+            if (A.BrojStupaca() != B.BrojStupaca()) return false;
+            if (A.BrojRedaka() != B.BrojRedaka()) return false;
+
+            for (int i = 0; i < A.BrojRedaka(); i++)
+                for (int j = 0; j < A.BrojStupaca(); j++)
+                    if (A.elementiMatrice[i][j] != B.elementiMatrice[i][j]) return false;
+
+            return true;
         }
 
         public static Matrica? FindPerName(string imeMatriceZaUsporedit, List<Matrica> Matrice)

@@ -10,17 +10,17 @@ namespace KonzolnaKontrola
     public class Konzola
     {
         //Kljucne rijeci za komande (MORA BITI VELIKIM SLOVIMA / malim i metodom ToUpper())
-        private string zbrajanje = "ADD".ToUpper();
-        private string mnozenje = "MTY".ToUpper();
-        private string ispisMatrice = "PRINT".ToUpper();
-        private string definiranjeMatrice = "DEF".ToUpper();
-        private string spremiUVarijablu = "ST".ToUpper();
-        private string exitProgram = "ESC".ToUpper();
-        private string helpMenu = "HELP".ToUpper();
-        private string transpozicija = "T".ToUpper();
+        public string zbrajanje = "ADD".ToUpper();
+        public string mnozenje = "MTY".ToUpper();
+        public string ispisMatrice = "PRINT".ToUpper();
+        public string definiranjeMatrice = "DEF".ToUpper();
+        public string spremiUVarijablu = "ST".ToUpper();
+        public string exitProgram = "ESC".ToUpper();
+        public string helpMenu = "HELP".ToUpper();
+        public string transpozicija = "T".ToUpper();
 
 
-        public int Input(string userInput, List<Matrica> Matrice)
+        public int Input(string userInput, List<Matrica> Matrice, bool internalCall = false)
         //vraca 0 - ako nema iznimki, -1 - ako se pojavila greska, ali je rjesena, 1 - za izlaz iz aplikacije, 2 - za izlaz sa spremanjem u file
         {
             bool saveToFile = false;
@@ -123,6 +123,11 @@ namespace KonzolnaKontrola
                     {
                         Matrice.Add(Rjesenje);
                     }
+                    else if (internalCall)
+                    {
+                        Matrice.Remove(MatricaNameColTest);
+                        Matrice.Add(Rjesenje);
+                    }
                     else
                     {
                         bool ReDefinirana = Fn.ReDefiniraj(MatricaNameColTest, Matrice);
@@ -194,6 +199,11 @@ namespace KonzolnaKontrola
                     {
                         Matrice.Add(Rjesenje);
                     }
+                    else if (internalCall)
+                    {
+                        Matrice.Remove(MatricaNameColTest);
+                        Matrice.Add(Rjesenje);
+                    } 
                     else
                     {
                         bool ReDefinirana = Fn.ReDefiniraj(MatricaNameColTest, Matrice);
