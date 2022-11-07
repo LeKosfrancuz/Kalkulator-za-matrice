@@ -40,7 +40,7 @@ namespace KonzolnaKontrola
                 Console.WriteLine("\t- Moraju imati 2 operanda");
                 Console.WriteLine("\t- Pišu se BEZ razmaka npr (2^3)");
                 Console.WriteLine("\t- A - broj ili matrica");
-                Console.WriteLine("\t- B - pozitivan broj ili slovo \"T\"\n");
+                Console.WriteLine("\t- B - (decimalan broj ako je A broj), pozitivan broj ili slovo \"T\"\n");
 
                 Console.WriteLine("HELP MENI ZA KALKULATOR MATRICA\n\n" +
                                   "od verzije 2.1 sljedeće komande su dostupne: \n\n" +

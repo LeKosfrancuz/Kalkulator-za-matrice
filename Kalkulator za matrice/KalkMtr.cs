@@ -43,6 +43,7 @@ class Program
             exitProgram = UserInputParser.UserInputParser.UserToKonsoleTranslator(Console.ReadLine() + "", Matrice);
             } catch (ArgumentException e) { Konzola.KonzolaRedTX("Greška: "); Console.WriteLine(e.Message); } 
             catch (InvalidOperationException e) { Konzola.KonzolaRedTX("Greška: "); Console.WriteLine(e.Message); }
+            catch (FormatException e) { Konzola.KonzolaRedTX("Greška: "); Console.WriteLine(e.Message); }
             useKonzola = false;
 
             if (exitProgram == (int)returnFlags.exitToConsole)
@@ -65,7 +66,7 @@ class Program
             }
         }
         Console.WriteLine("Napravio Mateo Kos");
-        Console.WriteLine("Kalkulator matrica v2.3, Lipanj 2022.");
+        Console.WriteLine("Kalkulator matrica v2.4, Lipanj 2022.");
         Thread.Sleep(500);
         
     }
@@ -179,7 +180,7 @@ namespace UserInputParser
                 if (A == null || B == null)
                     if (IsNumber(userInputOperacije[Operacije[0].index - 1]) && IsNumber(posljeOperacije))
                     {
-                        int rj = int.Parse(prijeOperacije) + int.Parse(posljeOperacije);
+                        double rj = double.Parse(prijeOperacije) + double.Parse(posljeOperacije);
                         userInputOperacije[Operacije[0].index + 1] = $"{rj}";
                         userInputOperacije.RemoveAt(Operacije[0].index);    //Uklanja operande i operaciju
                         userInputOperacije.RemoveAt(Operacije[0].index - 1);
@@ -224,7 +225,7 @@ namespace UserInputParser
                 if (A == null || B == null)
                     if (IsNumber(userInputOperacije[Operacije[0].index - 1]) && IsNumber(posljeOperacije))
                     {
-                        int rj = int.Parse(prijeOperacije) - int.Parse(posljeOperacije);
+                        double rj = double.Parse(prijeOperacije) - double.Parse(posljeOperacije);
                         userInputOperacije[Operacije[0].index + 1] = $"{rj}";
                         userInputOperacije.RemoveAt(Operacije[0].index);    //Uklanja operande i operaciju
                         userInputOperacije.RemoveAt(Operacije[0].index - 1);
@@ -269,7 +270,7 @@ namespace UserInputParser
                 if (A == null || B == null)
                     if (IsNumber(prijeOperacije) && IsNumber(posljeOperacije))
                     {
-                        int rj = int.Parse(prijeOperacije) * int.Parse(posljeOperacije);
+                        double rj = double.Parse(prijeOperacije) * double.Parse(posljeOperacije);
                         userInputOperacije[Operacije[0].index + 1] = $"{rj}";
                         userInputOperacije.RemoveAt(Operacije[0].index);    //Uklanja operande i operaciju
                         userInputOperacije.RemoveAt(Operacije[0].index - 1);
@@ -326,7 +327,7 @@ namespace UserInputParser
                         double rj;
                         numOnly = true;
                         if (posljeOperacije == "T")
-                            rj = int.Parse(prijeOperacije);
+                            rj = double.Parse(prijeOperacije);
                         else
                             rj = Math.Pow(double.Parse(prijeOperacije), double.Parse(posljeOperacije));
 
@@ -376,7 +377,7 @@ namespace UserInputParser
                 if (A == null || B == null)
                     if (IsNumber(prijeOperacije) && IsNumber(posljeOperacije))
                     {
-                        if (int.Parse(prijeOperacije) == int.Parse(posljeOperacije) ) {
+                        if (double.Parse(prijeOperacije) == double.Parse(posljeOperacije) ) {
                             Console.Write("Lijeva i desna strana su jednake! ");
                             Konzola.KonzolaGreenBG("TRUE\n");
                             return (int)returnFlags.JednadzbaTrue;
@@ -492,7 +493,7 @@ namespace UserInputParser
 
             try
             {
-                int.Parse(input);
+                double.Parse(input);
             } catch (FormatException)
             {
                 return false;
