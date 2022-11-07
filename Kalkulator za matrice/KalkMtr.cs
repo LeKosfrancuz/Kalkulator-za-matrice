@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization.Formatters.Binary;
 using FunkcijeZaMatrice;
 
 //Lokalni namespace
@@ -11,15 +9,17 @@ class Program
 {
     static void Main()
     {
-        List<double> matricaT1 = new List<double> {1, 2};
-        List<double> matricaT2 = new List<double> {3, 4};
-        List<List<double>> matricaT = new List<List<double>> {matricaT1, matricaT2};
-        Matrica inputMatrica = new Matrica("TestA", matricaT);
-        List<Matrica> Matrice = new List<Matrica> {inputMatrica};
+        //Console.SetWindowSize(120, 30);  //Windows Only!
 
-        matricaT1 = new List<double> {2, 4};
-        matricaT2 = new List<double> {4, 1};
-        matricaT = new List<List<double>> {matricaT1, matricaT2};
+        List<double> matricaT1 = new List<double> { 1, 2 };
+        List<double> matricaT2 = new List<double> { 3, 4 };
+        List<List<double>> matricaT = new List<List<double>> { matricaT1, matricaT2 };
+        Matrica inputMatrica = new Matrica("TestA", matricaT);
+        List<Matrica> Matrice = new List<Matrica> { inputMatrica };
+
+        matricaT1 = new List<double> { 2, 4 };
+        matricaT2 = new List<double> { 4, 1 };
+        matricaT = new List<List<double>> { matricaT1, matricaT2 };
         inputMatrica = new Matrica("TestB", matricaT);
         Matrice.Add(inputMatrica);
 
@@ -33,15 +33,25 @@ class Program
         bool useKonzola = false;
         int exitProgram = 1;
 
-        Console.WriteLine("Dobro došli u kalkulator za matrice");
+        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.Write("Dobro došli u ");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("Kalulator za matrice");
+        Console.ForegroundColor = ConsoleColor.Gray;
         Console.WriteLine("Upišite HELP za listu komandi");
+        Console.ForegroundColor = ConsoleColor.White;
+
         while (exitProgram != (int)returnFlags.SaveToFile && exitProgram != (int)returnFlags.exitProgram)
         {
             Console.Write(">");
             try
             {
-            exitProgram = UserInputParser.UserInputParser.UserToKonsoleTranslator(Console.ReadLine() + "", Matrice);
-            } catch (ArgumentException e) { Konzola.KonzolaRedTX("Greška: "); Console.WriteLine(e.Message); } 
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                string userInput = Console.ReadLine() + "";
+                Console.ForegroundColor = ConsoleColor.White;
+                exitProgram = UserInputParser.UserInputParser.UserToKonsoleTranslator(userInput, Matrice);
+            }
+            catch (ArgumentException e) { Konzola.KonzolaRedTX("Greška: "); Console.WriteLine(e.Message); }
             catch (InvalidOperationException e) { Konzola.KonzolaRedTX("Greška: "); Console.WriteLine(e.Message); }
             catch (FormatException e) { Konzola.KonzolaRedTX("Greška: "); Console.WriteLine(e.Message); }
             useKonzola = false;
@@ -65,10 +75,12 @@ class Program
                 useKonzola = false;
             }
         }
-        Console.WriteLine("Napravio Mateo Kos");
-        Console.WriteLine("Kalkulator matrica v2.4, Lipanj 2022.");
+        Console.WriteLine("\nNapravio Mateo Kos");
+        Console.Write("Kalkulator matrica ");
+        Konzola.KonzolaYellowTX("v2.4"); Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine(", Lipanj 2022.");
         Thread.Sleep(500);
-        
+
     }
 }
 
@@ -93,8 +105,7 @@ namespace UserInputParser
             if (userInput.ToUpper() == exitToConsole) return (int)returnFlags.exitToConsole;
             if (userInput.ToUpper() == helpMeni || userInput == "?")
             {
-                Konzola TKonzola = new Konzola();
-                TKonzola.Input("?", Matrice);
+                PrintHelpMeni();
                 return (int)returnFlags.softExit;
             }
 
@@ -133,10 +144,12 @@ namespace UserInputParser
                 if (operacija == "=")
                 {
                     Operacije.Add(IspuniListuPrioriteta(i, prioritetEQU, '='));
-                } else if (operacija == "*")
+                }
+                else if (operacija == "*")
                 {
                     Operacije.Add(IspuniListuPrioriteta(i, prioritetMUL, '*'));
-                } else if (operacija.Contains("^"))
+                }
+                else if (operacija.Contains("^"))
                 {
                     Operacije.Add(IspuniListuPrioriteta(i, prioritetPOT, '^'));
                 }
@@ -212,7 +225,8 @@ namespace UserInputParser
                 }
                 Operacije.RemoveAt(0);
 
-            } else if (Operacije[0].operacija == '-')
+            }
+            else if (Operacije[0].operacija == '-')
             {
                 string KonzolniString;
 
@@ -258,7 +272,8 @@ namespace UserInputParser
                 }
                 Operacije.RemoveAt(0);
 
-            } else if (Operacije[0].operacija == '*')
+            }
+            else if (Operacije[0].operacija == '*')
             {
                 string KonzolniString;
                 string prijeOperacije = userInputOperacije[Operacije[0].index - 1];
@@ -277,7 +292,8 @@ namespace UserInputParser
                         numOnly = true;
                         print = false;
 
-                    } else if (A == null && !IsNumber(prijeOperacije) || B == null && !IsNumber(posljeOperacije))
+                    }
+                    else if (A == null && !IsNumber(prijeOperacije) || B == null && !IsNumber(posljeOperacije))
                         throw new ArgumentException($"Jedna od matrica nije definirana (\"{prijeOperacije} + {posljeOperacije}\")");
 
 
@@ -307,7 +323,8 @@ namespace UserInputParser
                 }
                 Operacije.RemoveAt(0);
 
-            }else if (Operacije[0].operacija == '^') 
+            }
+            else if (Operacije[0].operacija == '^')
             {
                 string KonzolniString;
                 string[] razdvajanjeNaBazuIEksponent = userInputOperacije[Operacije[0].index].Split('^');
@@ -343,7 +360,8 @@ namespace UserInputParser
                     {
                         KonzolniString = $"{Konzola.transpozicija} {A.imeMatrice} {Konzola.spremiUVarijablu} TMP{tempInt}";
                         Konzola.Input(KonzolniString, MatriceCopy, internalCall);
-                    } else if (int.Parse(posljeOperacije) > 0)
+                    }
+                    else if (int.Parse(posljeOperacije) > 0)
                     {
                         Konzola.Input($"{Konzola.mnozenje} 1 {A.imeMatrice} {Konzola.spremiUVarijablu} TMP{tempInt}", MatriceCopy, internalCall);
                         for (int i = 2; i <= int.Parse(posljeOperacije); i++)
@@ -366,7 +384,8 @@ namespace UserInputParser
                 }
                 Operacije.RemoveAt(0);
 
-            }else if (Operacije[0].operacija == '=')
+            }
+            else if (Operacije[0].operacija == '=')
             {
                 string KonzolniString;
                 string prijeOperacije = userInputOperacije[Operacije[0].index - 1];
@@ -377,7 +396,8 @@ namespace UserInputParser
                 if (A == null || B == null)
                     if (IsNumber(prijeOperacije) && IsNumber(posljeOperacije))
                     {
-                        if (double.Parse(prijeOperacije) == double.Parse(posljeOperacije) ) {
+                        if (double.Parse(prijeOperacije) == double.Parse(posljeOperacije))
+                        {
                             Console.Write("Lijeva i desna strana su jednake! ");
                             Konzola.KonzolaGreenBG("TRUE\n");
                             return (int)returnFlags.JednadzbaTrue;
@@ -397,8 +417,8 @@ namespace UserInputParser
                         Operacije.RemoveAt(0);
                         return (int)returnFlags.exitResultStored;
                     }
-                    
-               
+
+
                 if (A != null)
                 {
                     if (Fn.IsEqual(A, B))
@@ -437,8 +457,8 @@ namespace UserInputParser
             if ((int)returnFlags.JednadzbaFalse == rfll || (int)returnFlags.JednadzbaTrue == rfll) return (int)returnFlags.softExit;
             if ((int)returnFlags.softExit == rfll) return (int)returnFlags.softExit;
 
-            if (rfll == (int)returnFlags.normal ) 
-            Matrice.Add(MatriceCopy[MatriceCopy.Count - 1]);
+            if (rfll == (int)returnFlags.normal)
+                Matrice.Add(MatriceCopy[MatriceCopy.Count - 1]);
 
             if (rfll == (int)returnFlags.exitResultStored)
             {
@@ -453,10 +473,10 @@ namespace UserInputParser
                 return (int)returnFlags.err;
 
             if (tempInt == 0 && !IsNumber(userInput) && print)
-            Konzola.Input($"PRINT {MatriceCopy[MatriceCopy.Count - 1].imeMatrice}", Matrice);
-            
+                Konzola.Input($"PRINT {MatriceCopy[MatriceCopy.Count - 1].imeMatrice}", Matrice);
+
             if (rfll == (int)returnFlags.normal)
-            Matrice.Remove(MatriceCopy[MatriceCopy.Count - 1]);
+                Matrice.Remove(MatriceCopy[MatriceCopy.Count - 1]);
 
 
             return (int)returnFlags.normal;
@@ -473,18 +493,30 @@ namespace UserInputParser
             return prioritetOperacija;
         }
 
-        private static T DeepCopy<T>(T item)
+        private static void PrintHelpMeni()
         {
-#pragma warning disable SYSLIB0011
-            BinaryFormatter formatter = new BinaryFormatter();
-            MemoryStream stream = new MemoryStream();
-            if (item == null) throw new ArgumentNullException(nameof(item), "Argument funkcije DeepCopy ne smije biti NULL!");
-            formatter.Serialize(stream, item);
-            stream.Seek(0, SeekOrigin.Begin);
-            T result = (T)formatter.Deserialize(stream);
-            stream.Close();
-            return result;
-#pragma warning restore SYSLIB0011
+            //Za Kalkulator
+            Console.WriteLine("\nHELP MENI ZA KALKULATOR MATRICA\n\n" +
+                              "od verzije 2.1 sljedeæe komande su dostupne: \n\n\n" +
+                              "\"{0} [ImeMatrice]\" \n" +
+                              "\t- Zapoèinje kreaciju matrice [ImeMatrice]\n\n" +
+                              "\"{1}\", \"?\"\n" +
+                              "\t- Pokaže ovaj meni\n\n" +
+                              "\"{2}\" \n" +
+                              "\t- Izaðe iz kalkulatora u konzolu\n\n" +
+                              "\"{3}\", \"ESC\"\n" +
+                              "\t- Izaðe iz programa\n\n", UserInputParser.defineVariable, UserInputParser.helpMeni, UserInputParser.exitToConsole, UserInputParser.exitFromCalc);
+            Console.WriteLine("Operacije \"A + B\", \"A - B\", \"A * B\", \"A = B\"");
+            Console.WriteLine("\t- Moraju imati 2 ili više operanda npr (A = B, A + B, ...)");
+            Console.WriteLine("\t- Operandi su imena matrica i brojevi (numericke vrjednosti)");
+            Console.WriteLine("\t- Ove operacije MORAJU se pisati sa razmakom oko njih npr (A_=_B) gdje je \"_\" razmak\n");
+
+            Console.WriteLine("Operacije potenciranja: \"A^B\"");
+            Console.WriteLine("\t- Moraju imati 2 operanda");
+            Console.WriteLine("\t- Pišu se BEZ razmaka npr (2^3)");
+            Console.WriteLine("\t- A - broj ili matrica");
+            Console.WriteLine("\t- B - (decimalan broj ako je A broj), pozitivan broj ili slovo \"T\"\n");
+            return;
         }
 
         public static bool IsNumber(string input)
@@ -494,13 +526,14 @@ namespace UserInputParser
             try
             {
                 double.Parse(input);
-            } catch (FormatException)
+            }
+            catch (FormatException)
             {
                 return false;
             }
-            
+
             return true;
-            
+
         }
     }
 
@@ -518,7 +551,7 @@ namespace UserInputParser
 
     class KComparerPrioriteta : IComparer<PrioritetOperacija>
     {
-        public int Compare(PrioritetOperacija x, PrioritetOperacija y) 
+        public int Compare(PrioritetOperacija x, PrioritetOperacija y)
         {
             if (x.prioritet < y.prioritet)                               //sortira prioritet rastuci
                 return -1;

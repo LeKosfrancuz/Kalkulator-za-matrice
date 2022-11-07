@@ -30,28 +30,7 @@ namespace KonzolnaKontrola
 
             if (userCommandFunc == "?" || userCommandFunc == helpMenu)
             {
-                //Za Kalkulator
-                Console.WriteLine("Operacije \"A + B\", \"A - B\", \"A * B\", \"A = B\"");
-                Console.WriteLine("\t- Moraju imati 2 ili više operanda npr (A = B, A + B, ...)");
-                Console.WriteLine("\t- Operandi su imena matrica i brojevi (numericke vrjednosti)");
-                Console.WriteLine("\t- Ove operacije MORAJU se pisati sa razmakom oko njih npr (A_=_B) gdje je \"_\" razmak\n");
-
-                Console.WriteLine("Operacije potenciranja: \"A^B\"");
-                Console.WriteLine("\t- Moraju imati 2 operanda");
-                Console.WriteLine("\t- Pišu se BEZ razmaka npr (2^3)");
-                Console.WriteLine("\t- A - broj ili matrica");
-                Console.WriteLine("\t- B - (decimalan broj ako je A broj), pozitivan broj ili slovo \"T\"\n");
-
-                Console.WriteLine("HELP MENI ZA KALKULATOR MATRICA\n\n" +
-                                  "od verzije 2.1 sljedeće komande su dostupne: \n\n" +
-                                  "\"{0} [ImeMatrice]\" \n" + 
-                                  "\t- Započinje kreaciju matrice [ImeMatrice]\n\n" + 
-                                  "\"{1}\", \"?\"\n" + 
-                                  "\t- Pokaže ovaj meni\n\n" +
-                                  "\"{2}\" \n" +
-                                  "\t- Izađe iz kalkulatora u konzolu\n\n" +
-                                  "\"{3}\", \"ESC\"\n" +
-                                  "\t- Izađe iz programa\n\n", UserInputParser.UserInputParser.defineVariable, UserInputParser.UserInputParser.helpMeni, UserInputParser.UserInputParser.exitToConsole, UserInputParser.UserInputParser.exitFromCalc);
+                Console.WriteLine("HELP MENI KONZOLA:");
 
 
                 //Za Konzolu
@@ -232,7 +211,7 @@ namespace KonzolnaKontrola
                     {
                         Matrice.Remove(MatricaNameColTest);
                         Matrice.Add(Rjesenje);
-                    } 
+                    }
                     else
                     {
                         bool ReDefinirana = Fn.ReDefiniraj(MatricaNameColTest, Matrice);
@@ -319,6 +298,15 @@ namespace KonzolnaKontrola
             Console.BackgroundColor = ConsoleColor.DarkGreen;
             Console.Write(s);
             Console.ResetColor();
+        }
+
+        public static string KonzolaYellowTX(string s)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.Write(s);
+            Console.ResetColor();
+            return "";
         }
     }
 }
