@@ -15,7 +15,7 @@ namespace FunkcijeZaMatrice
 
             if (!(A.BrojRedaka() == B.BrojRedaka() && A.BrojStupaca() == B.BrojStupaca()))
             {
-                throw new InvalidOperationException("\nMatrice moraju biti jednakih dimanzija! A(m,n) i B(m, n)\n");
+                throw new InvalidOperationException("Matrice moraju biti jednakih dimanzija! A(m,n) i B(m, n)");
             }
 
             for (int i = 0; i < A.BrojStupaca(); i++)
@@ -42,7 +42,7 @@ namespace FunkcijeZaMatrice
 
             if (!(A.BrojStupaca() == B.BrojRedaka()))
             {
-                throw new InvalidOperationException("\nMatrice moraju biti dimenzija A(m,n) i B(n, p)\n");
+                throw new InvalidOperationException("Matrice moraju biti dimenzija A(m,n) i B(n, p)");
             }
 
             for (int i = 0; i < B.BrojStupaca(); i++)

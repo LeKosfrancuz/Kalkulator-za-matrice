@@ -106,16 +106,18 @@ namespace KonzolnaKontrola
                     {
                         Fn.IspisMatrice(Fn.ZbrajanjeMatrica(MatricaA, MatricaB));
                     }
-                    catch (InvalidOperationException e) { Console.WriteLine("{0}", e.Message); return -1; }
+                    catch (InvalidOperationException e) { Console.WriteLine("{0}\n", e.Message); return -1; }
                 }
                 else if (userCommandArgs[3].Split(" ", 2).Length == 1 && userCommandArgs[2].ToUpper() == spremiUVarijablu && userCommandArgs[3] != "")
                 {
                     Matrica Rjesenje;
-                    try
-                    {
-                        Rjesenje = new Matrica(userCommandArgs[3], Fn.ZbrajanjeMatrica(MatricaA, MatricaB));
-                    }
-                    catch (InvalidOperationException e) { Console.WriteLine("{0}", e.Message); return -1; }
+                    if (!internalCall)
+                        try
+                        {
+                            Rjesenje = new Matrica(userCommandArgs[3], Fn.ZbrajanjeMatrica(MatricaA, MatricaB));
+                        }
+                        catch (InvalidOperationException e) { Console.WriteLine("{0}\n", e.Message); return -1; }
+                    else Rjesenje = new Matrica(userCommandArgs[3], Fn.ZbrajanjeMatrica(MatricaA, MatricaB));
 
                     //Provjera da ne postoji istoimena matrica u memoriji
                     var MatricaNameColTest = Fn.FindPerName(userCommandArgs[3], Matrice);
@@ -179,18 +181,20 @@ namespace KonzolnaKontrola
                         {
                             Fn.IspisMatrice(Fn.MnozenjeMatrica(MatricaA, MatricaB));
                         }
-                        catch (InvalidOperationException e) { Console.WriteLine("{0}", e.Message); return -1; }
+                        catch (InvalidOperationException e) { Console.WriteLine("{0}\n", e.Message); return -1; }
                     }
                 }
                 else if (userCommandArgs[3].Split(" ", 2).Length == 1 && userCommandArgs[2].ToUpper() == spremiUVarijablu && userCommandArgs[3] != "")
                 {
                     Matrica Rjesenje;
                     if (!skalarnoMnozenje)
-                        try
-                        {
-                            Rjesenje = new Matrica(userCommandArgs[3], Fn.MnozenjeMatrica(MatricaA, MatricaB));
-                        }
-                        catch (InvalidOperationException e) { Console.WriteLine("{0}", e.Message); return -1; }
+                        if (!internalCall)
+                            try
+                            {
+                                Rjesenje = new Matrica(userCommandArgs[3], Fn.MnozenjeMatrica(MatricaA, MatricaB));
+                            }
+                            catch (InvalidOperationException e) { Console.WriteLine("{0}\n", e.Message); return -1; }
+                        else Rjesenje = new Matrica(userCommandArgs[3], Fn.MnozenjeMatrica(MatricaA, MatricaB));
                     else Rjesenje = new Matrica(userCommandArgs[3], Fn.MnozenjeMatricaSkalarom(skalar, MatricaB));
 
                     //Provjera da ne postoji istoimena matrica u memoriji
@@ -244,13 +248,20 @@ namespace KonzolnaKontrola
                 if (saveToNewVariable)
                 {
                     var MatricaNameColTest = Fn.FindPerName(userCommandArgs[2], Matrice);
-                    if (MatricaNameColTest == null && imeVarijableNoveMatrice != "")
+                    if (imeVarijableNoveMatrice != "") throw new ArgumentException("Ime matrice ne smije biti razmak \" \"");
+                    if (MatricaNameColTest == null)
                     {
+                        Matrice.Add(Rjesenje);
+                    }
+                    else if (internalCall)
+                    {
+                        Matrice.Remove(MatricaNameColTest);
                         Matrice.Add(Rjesenje);
                     }
                     else
                     {
-                        Console.WriteLine("Nije moguće spremiti rezultat jer matrica s tim imenom već postoji!");
+                        KonzolaRedTX("Nije moguće spremiti rezultat ");
+                        Console.WriteLine("jer matrica s tim imenom već postoji!");
                     }
                 }
                 else
@@ -259,6 +270,30 @@ namespace KonzolnaKontrola
             }
 
             return 0;
+        }
+
+        public static void KonzolaRedBG(string s)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.DarkRed;
+            Console.Write(s);
+            Console.ResetColor();
+        }
+
+        public static void KonzolaRedTX(string s)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.Write(s);
+            Console.ResetColor();
+        }
+
+        public static void KonzolaGreenBG(string s)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.DarkGreen;
+            Console.Write(s);
+            Console.ResetColor();
         }
     }
 }
