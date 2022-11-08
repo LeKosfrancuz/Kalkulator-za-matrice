@@ -399,11 +399,11 @@ namespace UserInputParser
                         if (double.Parse(prijeOperacije) == double.Parse(posljeOperacije))
                         {
                             Console.Write("Lijeva i desna strana su jednake! ");
-                            Konzola.KonzolaGreenBG("TRUE\n");
+                            Konzola.KonzolaGreenBGLine("TRUE");
                             return (int)returnFlags.JednadzbaTrue;
                         }
                         Console.Write("Lijeva i desna strana nije jednaka! ");
-                        Konzola.KonzolaRedBG("FALSE\n");
+                        Konzola.KonzolaRedBGLine("FALSE");
                         return (int)returnFlags.JednadzbaFalse;
                     }
                     else if (A == null && IsNumber(posljeOperacije))
@@ -424,14 +424,14 @@ namespace UserInputParser
                     if (Fn.IsEqual(A, B))
                     {
                         Console.Write("Lijeva i desna strana su jednake! ");
-                        Konzola.KonzolaGreenBG("TRUE\n");
+                        Konzola.KonzolaGreenBGLine("TRUE");
                         Operacije.RemoveAt(0);
                         return (int)returnFlags.JednadzbaTrue;
                     }
                     else
                     {
                         Console.Write("Lijeva i desna strana nisu jednake! ");
-                        Konzola.KonzolaRedBG("FALSE\n");
+                        Konzola.KonzolaRedBGLine("FALSE");
                         Operacije.RemoveAt(0);
                         string imeNoveMatrice = A.imeMatrice;
 

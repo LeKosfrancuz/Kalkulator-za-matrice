@@ -71,6 +71,7 @@ namespace KonzolnaKontrola
                     Console.WriteLine("\nMatrica s imenom {0} nije pronađena!\n", userCommandArgs);
                     return -1;
                 }
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("Matrica {0}: ", MatricaA.imeMatrice);
                 Fn.IspisMatrice(MatricaA.elementiMatrice);
                 return 0;
@@ -252,7 +253,7 @@ namespace KonzolnaKontrola
                 if (saveToNewVariable)
                 {
                     var MatricaNameColTest = Fn.FindPerName(userCommandArgs[2], Matrice);
-                    if (imeVarijableNoveMatrice != "") throw new ArgumentException("Ime matrice ne smije biti razmak \" \"");
+                    if (imeVarijableNoveMatrice == "") throw new ArgumentException("Ime matrice ne smije biti razmak \" \"");
                     if (MatricaNameColTest == null)
                     {
                         Matrice.Add(Rjesenje);
@@ -306,6 +307,20 @@ namespace KonzolnaKontrola
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Write(s);
             Console.ResetColor();
+            return "";
+        }
+
+        public static string KonzolaGreenBGLine(string s)
+        {
+            KonzolaGreenBG(s);
+            Console.WriteLine();
+            return "";
+        }
+
+        public static string KonzolaRedBGLine(string s)
+        {
+            KonzolaRedBG(s);
+            Console.WriteLine();
             return "";
         }
     }
