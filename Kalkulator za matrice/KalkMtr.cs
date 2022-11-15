@@ -488,7 +488,7 @@ namespace UserInputParser
             if (tempInt == 0 && !IsNumber(userInput) && print)
                 Konzola.Input($"PRINT {MatriceCopy[MatriceCopy.Count - 1].imeMatrice}", Matrice);
 
-            if (rfll == (int)returnFlags.normal)
+            if (tempInt == 0 && rfll == (int)returnFlags.normal)
                 Matrice.Remove(MatriceCopy[MatriceCopy.Count - 1]);
 
 
@@ -557,7 +557,7 @@ namespace UserInputParser
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
 
-//          Console.Write("\x1b[u\x1b[2K\r>");
+            //          Console.Write("\x1b[u\x1b[2K\r>");
             Console.Write("\x1b[1A\r\x1b[2K\r>");
 
             List<string> userInputOperandi = new List<string> { "EMPTY" };
@@ -627,7 +627,7 @@ namespace UserInputParser
                     outputString += userInputOperandi[i] + " ";
             }
 
-            Console.WriteLine(outputString);
+            Console.WriteLine(outputString + "                        ");
 
             string outputStringUnEscaped = "";
             for (int i = 0; i < userInputOperandi.Count; i++)
