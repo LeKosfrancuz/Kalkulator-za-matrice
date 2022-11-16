@@ -544,6 +544,7 @@ namespace UserInputParser
 
             Console.Write("Pritisni neki gumb za nastavak...");
             Console.ReadKey();
+            Console.WriteLine("                                 \n");
 
             Console.WriteLine("Operacije potenciranja: \"A^B\"");
             Console.WriteLine("\t- Moraju imati 2 operanda");
