@@ -618,7 +618,7 @@ namespace UserInputParser
                 }
 
                 if (userInput[(i+1)%userInput.Length] == ' ' || i == userInput.Length - 1 || char.IsAscii(userInput[(i + 1) % userInput.Length]) 
-                    && ! ( char.IsLetterOrDigit(userInput[(i + 1) % userInput.Length]) || char.IsPunctuation(userInput[(i + 1) % userInput.Length])))
+                    && ! ( char.IsLetterOrDigit(userInput[(i + 1) % userInput.Length]) || userInput[(i + 1) % userInput.Length] == '.' ) )
                 {
                     //Ako je kljuèna rijeè -> obojaj u ljubièasto
                     if (tempInput.ToUpper() == UserInputParser.defineVariable || tempInput.ToUpper() == UserInputParser.helpMeni ||
