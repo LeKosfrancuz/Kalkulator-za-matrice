@@ -26,15 +26,6 @@ class Program
         Matrice.Add(inputMatrica);
 
 
-        // ESC[?25l	make cursor invisible
-        // ESC[?25h make cursor visible
-        // ESC[2K	erase the entire line
-        // ESC[3J	erase saved lines
-        // ESC[s	save cursor position (DEC)
-        // ESC[u    restores the cursor to the last saved position(DEC)
-        // \x1b[    ESC caracter
-
-
 
         ///                         KOMANDNA LINIJA
 
@@ -49,11 +40,12 @@ class Program
         Console.WriteLine("Upišite HELP za listu komandi");
         Console.ForegroundColor = ConsoleColor.White;
 
+        Console.CancelKeyPress += new ConsoleCancelEventHandler(ctrlCRukovanje);
+
         while (exitProgram != (int)returnFlags.SaveToFile && exitProgram != (int)returnFlags.exitProgram)
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(">");
-//          Console.Write("\x1b[s");
             try
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
@@ -88,11 +80,32 @@ class Program
                 useKonzola = false;
             }
         }
+
+        Credits();
+
+    }
+
+    private static void Credits()
+    {
         Console.WriteLine("\nNapravio Mateo Kos");
         Console.Write("Kalkulator matrica ");
         Konzola.KonzolaYellowTX("v2.5"); Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine(", Lipanj 2022.");
         Thread.Sleep(500);
+    }
+
+    protected static void ctrlCRukovanje(object sender, ConsoleCancelEventArgs args)
+    {
+
+        Console.WriteLine("\nProgram je prisilno zaustavljen");
+
+        Console.WriteLine($"\n  Pritisnut: {args.SpecialKey}");
+
+        Console.WriteLine(" "); 
+
+        Credits();
+
+        args.Cancel = false;
 
     }
 }
@@ -109,6 +122,7 @@ namespace UserInputParser
         public static string exitToConsole = "ASM";
         public static string helpMeni = "HELP";
         public static string defineVariable = "DEF";
+        public static string clScr = "CLS";
         public static int UserToKonsoleTranslator(string userInput, List<Matrica> Matrice, int tempInt = 0)
         {
             bool print = true;
@@ -116,6 +130,7 @@ namespace UserInputParser
             if (userInput.Length == 0) return (int)returnFlags.err;
             if (userInput.ToUpper() == exitFromCalc || userInput.ToUpper() == "ESC") return (int)returnFlags.exitProgram;
             if (userInput.ToUpper() == exitToConsole) return (int)returnFlags.exitToConsole;
+            if (userInput.ToUpper() == clScr) { Console.Clear(); return (int)returnFlags.softExit; }
             if (userInput.ToUpper() == helpMeni || userInput == "?")
             {
                 PrintHelpMeni();
@@ -314,9 +329,9 @@ namespace UserInputParser
                 if (!numOnly)
                 {
                     if (IsNumber(posljeOperacije))
-                        KonzolniString = $"{Konzola.mnozenje} {int.Parse(posljeOperacije)} {A.imeMatrice} {Konzola.spremiUVarijablu} TMP{tempInt}";
+                        KonzolniString = $"{Konzola.mnozenje} {double.Parse(posljeOperacije)} {A.imeMatrice} {Konzola.spremiUVarijablu} TMP{tempInt}";
                     else if (IsNumber(prijeOperacije))
-                        KonzolniString = $"{Konzola.mnozenje} {int.Parse(prijeOperacije)} {B.imeMatrice} {Konzola.spremiUVarijablu} TMP{tempInt}";
+                        KonzolniString = $"{Konzola.mnozenje} {double.Parse(prijeOperacije)} {B.imeMatrice} {Konzola.spremiUVarijablu} TMP{tempInt}";
                     else
                         KonzolniString = $"{Konzola.mnozenje} {A.imeMatrice} {B.imeMatrice} {Konzola.spremiUVarijablu} TMP{tempInt}";
 
@@ -510,7 +525,7 @@ namespace UserInputParser
         {
             //Za Kalkulator
             Console.WriteLine("\nHELP MENI ZA KALKULATOR MATRICA\n\n" +
-                              "od verzije 2.1 sljedeæe komande su dostupne: \n\n\n" +
+                              "od verzije 2.5 sljedeæe komande su dostupne: \n\n\n" +
                               "\"{0} [ImeMatrice]\" \n" +
                               "\t- Zapoèinje kreaciju matrice [ImeMatrice]\n\n" +
                               "\"{1}\", \"?\"\n" +
@@ -518,11 +533,17 @@ namespace UserInputParser
                               "\"{2}\" \n" +
                               "\t- Izaðe iz kalkulatora u konzolu\n\n" +
                               "\"{3}\", \"ESC\"\n" +
-                              "\t- Izaðe iz programa\n\n", UserInputParser.defineVariable, UserInputParser.helpMeni, UserInputParser.exitToConsole, UserInputParser.exitFromCalc);
+                              "\t- Izaðe iz programa\n\n" +
+                              "\"{4}\" \n" +
+                              "\t- Oèisti ekran\n\n", 
+                              UserInputParser.defineVariable, UserInputParser.helpMeni, UserInputParser.exitToConsole, UserInputParser.exitFromCalc, UserInputParser.clScr);
             Console.WriteLine("Operacije \"A + B\", \"A - B\", \"A * B\", \"A = B\"");
             Console.WriteLine("\t- Moraju imati 2 ili više operanda npr (A = B, A + B, ...)");
             Console.WriteLine("\t- Operandi su imena matrica i brojevi (numericke vrjednosti)");
             Console.WriteLine("\t- Ove operacije MORAJU se pisati sa razmakom oko njih npr (A_=_B) gdje je \"_\" razmak\n");
+
+            Console.Write("Pritisni neki gumb za nastavak...");
+            Console.ReadKey();
 
             Console.WriteLine("Operacije potenciranja: \"A^B\"");
             Console.WriteLine("\t- Moraju imati 2 operanda");
@@ -556,11 +577,20 @@ namespace UserInputParser
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
+            Console.Write("                                \r"); //Da oèisti help poruku
+            if (userInput == "") Console.Write("Upiši \"?\" za pomoæ\r");
+            
+            (int x_pomak, int y_pomak) = Console.GetCursorPosition();
+            x_pomak = Console.CursorLeft;
+            Console.SetCursorPosition(x_pomak, y_pomak - 1);
+            
+            if (userInput == "") return userInput;
 
-            //          Console.Write("\x1b[u\x1b[2K\r>");
-            Console.Write("\x1b[1A\r\x1b[2K\r>");
+            Console.Write(">");
+            
+            //Console.Write("\x1b[1A\r\x1b[2K\r>");
 
-            List<string> userInputOperandi = new List<string> { "EMPTY" };
+            List<BojaOperacija> userInputOperandi = new List<BojaOperacija> { AddOperacija(0, "0") };
             userInputOperandi.RemoveAt(0);
             if (userInputOperandi.Count > 0) throw new InvalidProgramException("Prazno polje operanada nije prazno!");
 
@@ -574,7 +604,7 @@ namespace UserInputParser
                 
                 if ( tempInput == "+" || tempInput == "-" || tempInput == "*" || tempInput == "/" || tempInput == "^" || tempInput == "=" )
                 {
-                    userInputOperandi.Add("\x1b[97m" + tempInput);
+                    userInputOperandi.Add(AddOperacija((int)ConsoleColor.White, tempInput));
                     brojOperanada++;
                     tempInput = "";
                     continue;
@@ -586,29 +616,31 @@ namespace UserInputParser
                     continue;
                 }
 
-                if (userInput[(i+1)%userInput.Length] == ' ' || i == userInput.Length - 1 || char.IsAscii(userInput[(i + 1) % userInput.Length]) && !char.IsLetterOrDigit(userInput[(i + 1) % userInput.Length]))
+                if (userInput[(i+1)%userInput.Length] == ' ' || i == userInput.Length - 1 || char.IsAscii(userInput[(i + 1) % userInput.Length]) 
+                    && ! ( char.IsLetterOrDigit(userInput[(i + 1) % userInput.Length]) || char.IsPunctuation(userInput[(i + 1) % userInput.Length])))
                 {
                     //Ako je kljuèna rijeè -> obojaj u ljubièasto
                     if (tempInput.ToUpper() == UserInputParser.defineVariable || tempInput.ToUpper() == UserInputParser.helpMeni ||
-                        tempInput.ToUpper() == UserInputParser.exitFromCalc || tempInput.ToUpper() == UserInputParser.exitToConsole)
+                        tempInput.ToUpper() == UserInputParser.exitFromCalc || tempInput.ToUpper() == UserInputParser.exitToConsole || 
+                        tempInput.ToUpper() == UserInputParser.clScr || tempInput == "?" || tempInput.ToUpper() == "ESC")
                     {
-                        userInputOperandi.Add("\x1b[95m" + tempInput);
+                        userInputOperandi.Add(AddOperacija((int)ConsoleColor.Magenta, tempInput));
                     }
                     else
                     {
                         //Ako matrica ne postoji, ovisi o mjestu u komandi obojaj u zeleno(spremanje u novu) ili crveno(raèunanje s novom)
                         var Matrica = Fn.FindPerName(tempInput, Matrice);
-                        if (Matrica == null)
+                        if (Matrica == null || UserInputParser.IsNumber(tempInput))
                             if (UserInputParser.IsNumber(tempInput))
                                 //Ako je broj -> obojaj u cyane
-                                userInputOperandi.Add("\x1b[96m" + tempInput);
+                                userInputOperandi.Add(AddOperacija((int)ConsoleColor.Cyan, tempInput));
                             else if (tempInput == userInput.Split("=")[0].Split(" ")[0])
-                                userInputOperandi.Add("\x1b[92m" + tempInput);
+                                userInputOperandi.Add(AddOperacija((int)ConsoleColor.Green, tempInput));
                             else
-                                userInputOperandi.Add("\x1b[91m" + tempInput);
+                                userInputOperandi.Add(AddOperacija((int)ConsoleColor.Red, tempInput));
                         else
                             //Ime postojeæe matrice obojaj u žutu
-                            userInputOperandi.Add("\x1b[93m" + tempInput);
+                            userInputOperandi.Add(AddOperacija((int)ConsoleColor.Yellow, tempInput));
                     }
                     
                     brojOperanada++;
@@ -617,41 +649,55 @@ namespace UserInputParser
                 
             }
 
-            string outputString = "";
+            List<BojaOperacija> outputString = new List<BojaOperacija> { AddOperacija(0, "0") };
+            outputString.RemoveAt(0);
 
             for (int i = 0; i < userInputOperandi.Count; i++)
             {
-                if ( userInputOperandi[(i+1)%userInputOperandi.Count].Contains('^') || userInputOperandi[i].Contains('^') || i == userInputOperandi.Count - 1 )
-                outputString += userInputOperandi[i];
+                if (userInputOperandi[(i + 1) % userInputOperandi.Count].operacija.Contains('^') || userInputOperandi[i].operacija.Contains('^') || i == userInputOperandi.Count - 1)
+                    outputString.Add(userInputOperandi[i]);
                 else
-                    outputString += userInputOperandi[i] + " ";
+                {
+                    outputString.Add( userInputOperandi[i] );
+                    outputString[i] = AddOperacija(outputString[i].boja, outputString[i].operacija + " ");
+                }
             }
 
-            Console.WriteLine(outputString + "                        ");
+            for (int i = 0; i < outputString.Count; i++)
+            {
+                Console.ForegroundColor = (ConsoleColor)outputString[i].boja;
+                Console.Write(outputString[i].operacija);
+            }
+
+            int brojZnakovaOperanada = 0;
+            for (int i = 0; i < outputString.Count; i++)
+                brojZnakovaOperanada += outputString[i].operacija.Length;
+
+            Console.WriteLine(string.Empty.PadRight(Math.Abs(userInput.Length - brojZnakovaOperanada)));
 
             string outputStringUnEscaped = "";
-            for (int i = 0; i < userInputOperandi.Count; i++)
+            for (int i = 0; i < outputString.Count; i++)
             {
-                tempInput = "";
-                for (int j = 0; j < userInputOperandi[i].Length; j++)
-                {
-                    if ( char.IsControl( userInputOperandi[i][j] ) ) continue;
-                    if (userInputOperandi[i][j] == '[')
-                        for (; j < userInputOperandi[i].Length; j++)
-                            if (userInputOperandi[i][j-1] == 'm') 
-                                break;
-
-                    tempInput += userInputOperandi[i][j];
-                }
-
-                if (userInputOperandi[(i + 1) % userInputOperandi.Count].Contains('^') || userInputOperandi[i].Contains('^') || i == userInputOperandi.Count - 1 )
-                    outputStringUnEscaped += tempInput;
-                else
-                    outputStringUnEscaped += tempInput + " ";
+                    outputStringUnEscaped += outputString[i].operacija;
             }
 
             return outputStringUnEscaped;
 
+        }
+
+        private static BojaOperacija AddOperacija(int bojaOperacije, string tekstOperacije)
+        {
+            BojaOperacija bojaOperacija;
+            bojaOperacija.boja = bojaOperacije;
+            bojaOperacija.operacija = tekstOperacije;
+
+            return bojaOperacija;
+        }
+
+        private struct BojaOperacija
+        {
+            public int boja;
+            public string operacija;
         }
     }
 
