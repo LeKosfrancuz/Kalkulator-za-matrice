@@ -1,4 +1,4 @@
-using FunkcijeZaMatrice;
+Ôªøusing FunkcijeZaMatrice;
 
 //Lokalni namespace
 using KonzolnaKontrola;
@@ -33,16 +33,16 @@ class Program
         int exitProgram = 1;
 
         Console.ForegroundColor = ConsoleColor.Gray;
-        Console.Write("Dobro doöli u ");
+        Console.Write("Dobro do≈°li u ");
         Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine("Kalulator za matrice");
         Console.ForegroundColor = ConsoleColor.Gray;
-        Console.WriteLine("Upiöite HELP za listu komandi");
+        Console.WriteLine("Upi≈°ite HELP za listu komandi");
         Console.ForegroundColor = ConsoleColor.White;
 
         Console.CancelKeyPress += new ConsoleCancelEventHandler(ctrlCRukovanje);
 
-        while (exitProgram != (int)returnFlags.SaveToFile && exitProgram != (int)returnFlags.exitProgram)
+        while (exitProgram != (int)returnFlagsParser.SaveToFile && exitProgram != (int)returnFlagsParser.exitProgram)
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(">");
@@ -56,12 +56,12 @@ class Program
                 Console.ForegroundColor = ConsoleColor.White;
                 exitProgram = UserInputParser.UserInputParser.UserToKonsoleTranslator(userInput, Matrice);
             }
-            catch (ArgumentException e) { Konzola.KonzolaRedTX("Greöka: "); Console.WriteLine(e.Message); }
-            catch (InvalidOperationException e) { Konzola.KonzolaRedTX("Greöka: "); Console.WriteLine(e.Message); }
-            catch (FormatException e) { Konzola.KonzolaRedTX("Greöka: "); Console.WriteLine(e.Message); }
+            catch (ArgumentException e) { Konzola.KonzolaRedTX("Gre≈°ka: "); Console.WriteLine(e.Message); }
+            catch (InvalidOperationException e) { Konzola.KonzolaRedTX("Gre≈°ka: "); Console.WriteLine(e.Message); }
+            catch (FormatException e) { Konzola.KonzolaRedTX("Gre≈°ka: "); Console.WriteLine(e.Message); }
             useKonzola = false;
 
-            if (exitProgram == (int)returnFlags.exitToConsole)
+            if (exitProgram == (int)returnFlagsParser.exitToConsole)
                 useKonzola = true;
 
 
@@ -126,15 +126,15 @@ namespace UserInputParser
         public static int UserToKonsoleTranslator(string userInput, List<Matrica> Matrice, int tempInt = 0)
         {
             bool print = true;
-            if (userInput == null) return (int)returnFlags.err;
-            if (userInput.Length == 0) return (int)returnFlags.err;
-            if (userInput.ToUpper() == exitFromCalc || userInput.ToUpper() == "ESC") return (int)returnFlags.exitProgram;
-            if (userInput.ToUpper() == exitToConsole) return (int)returnFlags.exitToConsole;
-            if (userInput.ToUpper() == clScr) { Console.Clear(); return (int)returnFlags.softExit; }
+            if (userInput == null) return (int)returnFlagsParser.err;
+            if (userInput.Length == 0) return (int)returnFlagsParser.err;
+            if (userInput.ToUpper() == exitFromCalc || userInput.ToUpper() == "ESC") return (int)returnFlagsParser.exitProgram;
+            if (userInput.ToUpper() == exitToConsole) return (int)returnFlagsParser.exitToConsole;
+            if (userInput.ToUpper() == clScr) { Console.Clear(); return (int)returnFlagsParser.softExit; }
             if (userInput.ToUpper() == helpMeni || userInput == "?")
             {
                 PrintHelpMeni();
-                return (int)returnFlags.softExit;
+                return (int)returnFlagsParser.softExit;
             }
 
             bool internalCall = true;
@@ -150,13 +150,13 @@ namespace UserInputParser
             {
                 Konzola TKonzola = new Konzola();
                 TKonzola.Input(TKonzola.ispisMatrice + " " + userInput, Matrice);
-                return (int)returnFlags.softExit;
+                return (int)returnFlagsParser.softExit;
             }
             if (userInputOperacije[0].ToUpper() == defineVariable)
             {
                 Konzola TKonzola = new Konzola();
                 TKonzola.Input(TKonzola.definiranjeMatrice + " " + userInputOperacije[1], Matrice);
-                return (int)returnFlags.softExit;
+                return (int)returnFlagsParser.softExit;
             }
             int maxIndex = userInputOperacije.Count();
             int brojOperacija = maxIndex / 2;
@@ -196,7 +196,7 @@ namespace UserInputParser
                 var sorter = new KComparerPrioriteta();
                 Operacije.Sort(sorter);
             }
-            else return (int)returnFlags.err;
+            else return (int)returnFlagsParser.err;
 
             List<Matrica> MatriceCopy = new List<Matrica>(Matrice);
             Konzola Konzola = new Konzola();
@@ -229,7 +229,7 @@ namespace UserInputParser
                         print = false;
                     }
                     else if (IsNumber(prijeOperacije) || IsNumber(posljeOperacije))
-                        throw new ArgumentException("Nije moguÊe zbrojiti matricu sa skalarom");
+                        throw new ArgumentException("Nije mogu√¶e zbrojiti matricu sa skalarom");
                     else
                         throw new ArgumentException($"Jedna od matrica nije definirana (\"{prijeOperacije} + {posljeOperacije}\")");
 
@@ -275,7 +275,7 @@ namespace UserInputParser
                         print = false;
                     }
                     else if (IsNumber(prijeOperacije) || IsNumber(posljeOperacije))
-                        throw new ArgumentException("Nije moguÊe zbrojiti matricu sa skalarom");
+                        throw new ArgumentException("Nije mogu√¶e zbrojiti matricu sa skalarom");
                     else
                         throw new ArgumentException($"Jedna od matrica nije definirana (\"{prijeOperacije} - {posljeOperacije}\")");
 
@@ -433,22 +433,22 @@ namespace UserInputParser
                         {
                             Console.Write("Lijeva i desna strana su jednake! ");
                             Konzola.KonzolaGreenBGLine("TRUE");
-                            return (int)returnFlags.JednadzbaTrue;
+                            return (int)returnFlagsParser.JednadzbaTrue;
                         }
                         Console.Write("Lijeva i desna strana nije jednaka! ");
                         Konzola.KonzolaRedBGLine("FALSE");
-                        return (int)returnFlags.JednadzbaFalse;
+                        return (int)returnFlagsParser.JednadzbaFalse;
                     }
                     else if (A == null && IsNumber(posljeOperacije))
-                        throw new ArgumentException($"Nije moguÊe spremiti brojËanu vrijednost u varijablu za matrice. (\"{prijeOperacije} = {posljeOperacije}\")");
+                        throw new ArgumentException($"Nije mogu√¶e spremiti brojƒçanu vrijednost u varijablu za matrice. (\"{prijeOperacije} = {posljeOperacije}\")");
                     else if (B == null)
-                        throw new ArgumentException($"Nije pronaena matrica {posljeOperacije}!");
+                        throw new ArgumentException($"Nije pronaƒëena matrica {posljeOperacije}!");
                     else if (A == null) 
                     {
                         KonzolniString = $"{Konzola.mnozenje} 1 {B.imeMatrice} {Konzola.spremiUVarijablu} {prijeOperacije}";
                         Konzola.Input(KonzolniString, Matrice, internalCall);
                         Operacije.RemoveAt(0);
-                        return (int)returnFlags.exitResultStored;
+                        return (int)returnFlagsParser.exitResultStored;
                     }
 
 
@@ -459,7 +459,7 @@ namespace UserInputParser
                         Console.Write("Lijeva i desna strana su jednake! ");
                         Konzola.KonzolaGreenBGLine("TRUE");
                         Operacije.RemoveAt(0);
-                        return (int)returnFlags.JednadzbaTrue;
+                        return (int)returnFlagsParser.JednadzbaTrue;
                     }
                     else
                     {
@@ -473,9 +473,9 @@ namespace UserInputParser
                             Matrica Rj = new(imeNoveMatrice, B.elementiMatrice);
                             Matrice.Remove(A);
                             Matrice.Add(Rj);
-                            return (int)returnFlags.exitResultStored;
+                            return (int)returnFlagsParser.exitResultStored;
                         }
-                        return (int)returnFlags.normal;
+                        return (int)returnFlagsParser.normal;
                     }
                 }
 
@@ -483,17 +483,17 @@ namespace UserInputParser
             }
 
             //Console.WriteLine(userInput);
-            int rfll = (int)returnFlags.normal;
+            int rfll = (int)returnFlagsParser.normal;
             if (Operacije.Count() > 0)
                 rfll = UserToKonsoleTranslator(userInput, MatriceCopy, tempInt + 1); // Return from lower layer
 
-            if ((int)returnFlags.JednadzbaFalse == rfll || (int)returnFlags.JednadzbaTrue == rfll) return (int)returnFlags.softExit;
-            if ((int)returnFlags.softExit == rfll) return rfll;
+            if ((int)returnFlagsParser.JednadzbaFalse == rfll || (int)returnFlagsParser.JednadzbaTrue == rfll) return (int)returnFlagsParser.softExit;
+            if ((int)returnFlagsParser.softExit == rfll) return rfll;
 
-            if (rfll == (int)returnFlags.normal)
+            if (rfll == (int)returnFlagsParser.normal)
                 Matrice.Add(MatriceCopy[MatriceCopy.Count - 1]);
 
-            if (rfll == (int)returnFlags.exitResultStored)
+            if (rfll == (int)returnFlagsParser.exitResultStored)
             {
                 var NameColTest = Fn.FindPerName(MatriceCopy[MatriceCopy.Count - 1].imeMatrice, Matrice);
                 if (NameColTest != null) Matrice.Remove(NameColTest);
@@ -502,13 +502,13 @@ namespace UserInputParser
 
             if (IsNumber(userInput)) Console.WriteLine(userInput);
 
-            if (rfll == (int)returnFlags.err)
+            if (rfll == (int)returnFlagsParser.err)
                 return rfll;
 
             if (tempInt == 0 && !IsNumber(userInput) && print)
                 Konzola.Input($"PRINT {MatriceCopy[MatriceCopy.Count - 1].imeMatrice}", Matrice);
 
-            if (tempInt == 0 && rfll == (int)returnFlags.normal)
+            if (tempInt == 0 && rfll == (int)returnFlagsParser.normal)
                 Matrice.Remove(MatriceCopy[MatriceCopy.Count - 1]);
 
             return rfll;
@@ -529,20 +529,20 @@ namespace UserInputParser
         {
             //Za Kalkulator
             Console.WriteLine("\nHELP MENI ZA KALKULATOR MATRICA\n\n" +
-                              "od verzije 2.5 sljedeÊe komande su dostupne: \n\n\n" +
+                              "od verzije 2.5 sljede√¶e komande su dostupne: \n\n\n" +
                               "\"{0} [ImeMatrice]\" \n" +
-                              "\t- ZapoËinje kreaciju matrice [ImeMatrice]\n\n" +
+                              "\t- Zapoƒçinje kreaciju matrice [ImeMatrice]\n\n" +
                               "\"{1}\", \"?\"\n" +
-                              "\t- Pokaûe ovaj meni\n\n" +
+                              "\t- Poka≈æe ovaj meni\n\n" +
                               "\"{2}\" \n" +
-                              "\t- Izae iz kalkulatora u konzolu\n\n" +
+                              "\t- Izaƒëe iz kalkulatora u konzolu\n\n" +
                               "\"{3}\", \"ESC\"\n" +
-                              "\t- Izae iz programa\n\n" +
+                              "\t- Izaƒëe iz programa\n\n" +
                               "\"{4}\" \n" +
-                              "\t- OËisti ekran\n\n", 
+                              "\t- Oƒçisti ekran\n\n", 
                               UserInputParser.defineVariable, UserInputParser.helpMeni, UserInputParser.exitToConsole, UserInputParser.exitFromCalc, UserInputParser.clScr);
             Console.WriteLine("Operacije \"A + B\", \"A - B\", \"A * B\", \"A = B\"");
-            Console.WriteLine("\t- Moraju imati 2 ili viöe operanda npr (A = B, A + B, ...)");
+            Console.WriteLine("\t- Moraju imati 2 ili vi≈°e operanda npr (A = B, A + B, ...)");
             Console.WriteLine("\t- Operandi su imena matrica i brojevi (numericke vrjednosti)");
             Console.WriteLine("\t- Ove operacije MORAJU se pisati sa razmakom oko njih npr (A_=_B) gdje je \"_\" razmak\n");
 
@@ -552,7 +552,7 @@ namespace UserInputParser
 
             Console.WriteLine("Operacije potenciranja: \"A^B\"");
             Console.WriteLine("\t- Moraju imati 2 operanda");
-            Console.WriteLine("\t- Piöu se BEZ razmaka npr (2^3)");
+            Console.WriteLine("\t- Pi≈°u se BEZ razmaka npr (2^3)");
             Console.WriteLine("\t- A - broj ili matrica");
             Console.WriteLine("\t- B - (decimalan broj ako je A broj), pozitivan broj ili slovo \"T\"\n");
             return;
@@ -582,8 +582,8 @@ namespace UserInputParser
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
-            Console.Write("                                \r"); //Da oËisti help poruku
-            if (userInput == "") Console.Write("Upiöi \"?\" za pomoÊ\r");
+            Console.Write("                                \r"); //Da oƒçisti help poruku
+            if (userInput == "") Console.Write("Upi≈°i \"?\" za pomo√¶\r");
             
             (int x_pomak, int y_pomak) = Console.GetCursorPosition();
             x_pomak = Console.CursorLeft;
@@ -624,7 +624,7 @@ namespace UserInputParser
                 if (userInput[(i+1)%userInput.Length] == ' ' || i == userInput.Length - 1 || char.IsAscii(userInput[(i + 1) % userInput.Length]) 
                     && ! ( char.IsLetterOrDigit(userInput[(i + 1) % userInput.Length]) || userInput[(i + 1) % userInput.Length] == '.' ) )
                 {
-                    //Ako je kljuËna rijeË -> obojaj u ljubiËasto
+                    //Ako je kljuƒçna rijeƒç -> obojaj u ljubiƒçasto
                     if (tempInput.ToUpper() == UserInputParser.defineVariable || tempInput.ToUpper() == UserInputParser.helpMeni ||
                         tempInput.ToUpper() == UserInputParser.exitFromCalc || tempInput.ToUpper() == UserInputParser.exitToConsole || 
                         tempInput.ToUpper() == UserInputParser.clScr || tempInput == "?" || tempInput.ToUpper() == "ESC")
@@ -633,7 +633,7 @@ namespace UserInputParser
                     }
                     else
                     {
-                        //Ako matrica ne postoji, ovisi o mjestu u komandi obojaj u zeleno(spremanje u novu) ili crveno(raËunanje s novom)
+                        //Ako matrica ne postoji, ovisi o mjestu u komandi obojaj u zeleno(spremanje u novu) ili crveno(raƒçunanje s novom)
                         var Matrica = Fn.FindPerName(tempInput, Matrice);
                         if (Matrica == null || UserInputParser.IsNumber(tempInput))
                             if (UserInputParser.IsNumber(tempInput))
@@ -644,7 +644,7 @@ namespace UserInputParser
                             else
                                 userInputOperandi.Add(AddOperacija((int)ConsoleColor.Red, tempInput));
                         else
-                            //Ime postojeÊe matrice obojaj u ûutu
+                            //Ime postoje√¶e matrice obojaj u ≈æutu
                             userInputOperandi.Add(AddOperacija((int)ConsoleColor.Yellow, tempInput));
                     }
                     
@@ -706,7 +706,7 @@ namespace UserInputParser
         }
     }
 
-    enum returnFlags
+    public enum returnFlagsParser
     {
         err = -1, normal, exitResultStored, SaveToFile, JednadzbaTrue, JednadzbaFalse, exitToConsole, exitProgram, softExit
     }
