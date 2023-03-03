@@ -488,7 +488,7 @@ namespace UserInputParser
                 rfll = UserToKonsoleTranslator(userInput, MatriceCopy, tempInt + 1); // Return from lower layer
 
             if ((int)returnFlags.JednadzbaFalse == rfll || (int)returnFlags.JednadzbaTrue == rfll) return (int)returnFlags.softExit;
-            if ((int)returnFlags.softExit == rfll) return (int)returnFlags.softExit;
+            if ((int)returnFlags.softExit == rfll) return rfll;
 
             if (rfll == (int)returnFlags.normal)
                 Matrice.Add(MatriceCopy[MatriceCopy.Count - 1]);
@@ -503,7 +503,7 @@ namespace UserInputParser
             if (IsNumber(userInput)) Console.WriteLine(userInput);
 
             if (rfll == (int)returnFlags.err)
-                return (int)returnFlags.err;
+                return rfll;
 
             if (tempInt == 0 && !IsNumber(userInput) && print)
                 Konzola.Input($"PRINT {MatriceCopy[MatriceCopy.Count - 1].imeMatrice}", Matrice);
@@ -511,8 +511,7 @@ namespace UserInputParser
             if (tempInt == 0 && rfll == (int)returnFlags.normal)
                 Matrice.Remove(MatriceCopy[MatriceCopy.Count - 1]);
 
-
-            return (int)returnFlags.normal;
+            return rfll;
         }
 
 
