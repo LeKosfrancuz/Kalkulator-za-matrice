@@ -1,11 +1,4 @@
-﻿using NUnit.Framework;
-using MatricaNS;
-using KonzolnaKontrola;
-using UserInputParser;
-using FunkcijeZaMatrice;
-
-
-namespace Testovi;
+﻿namespace Testovi;
 
 public class TestiranjeKonzole
 {
